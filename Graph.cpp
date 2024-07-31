@@ -3,6 +3,10 @@
 #include "vertex.h"
 using namespace std;
 
+/*
+Method Name: Constructor
+Method Description: Initalize a vertex in the graph
+*/
 Graph::Graph(string name, int connections, int cost){
     vertex_collection[name] = new vertex;
     vertex_collection[name]->cost = cost;
@@ -11,6 +15,10 @@ Graph::Graph(string name, int connections, int cost){
     vertex_collection[name]->connections = new vertex*[connections];
 }
 
+/*
+Method Name: Destructor
+Method Description: Deletes the graph from the heap
+*/
 Graph::~Graph(){
     for (auto it = vertex_collection.begin(); it != vertex_collection.end(); it++)
     {
@@ -19,8 +27,12 @@ Graph::~Graph(){
     }
 }
 
+/*
+Method Name: Add_Vertex
+Method Description: Adds a vertex to the graph
+*/
 void Graph::Add_Vertex(string from, string name, int connections, bool bidirectional, int cost){
-    //check if from exist
+    //check if from exists
     if (!(vertex_collection[from])){
         vertex_collection.erase(from);
         cout << "Error, could not find " << from << "\n";
@@ -33,6 +45,7 @@ void Graph::Add_Vertex(string from, string name, int connections, bool bidirecti
         return;
     }
 
+    //add the vertex
     vertex_collection[name] = new vertex;
     vertex_collection[name]->cost = cost;
     vertex_collection[name]->name = name;
@@ -41,14 +54,19 @@ void Graph::Add_Vertex(string from, string name, int connections, bool bidirecti
     vertex_collection[from]->connections[vertex_collection[from]->connections_used] = vertex_collection[name];
     vertex_collection[from]->connections_used++;
 
+    //if the connection is bidirectional, add another edge
     if (bidirectional){
         vertex_collection[name]->connections[vertex_collection[name]->connections_used] = vertex_collection[from];
         vertex_collection[name]->connections_used++;
     }
 }
 
+/*
+Method Name: connect_existing
+Method Description: Connects two nodes together via an edge
+*/
 void Graph::connect_existing(string from, string to){
-    //check if they exist
+    //check if the two nodes exist
     if (!(vertex_collection[from])){
         vertex_collection.erase(from);
         cout << "Error, could not find " << from << "\n";
@@ -72,10 +90,15 @@ void Graph::connect_existing(string from, string to){
         return;
     }
 
+    //connect the two nodes
     vertex_collection[from]->connections[vertex_collection[from]->connections_used] = vertex_collection[to];
     vertex_collection[from]->connections_used++;
 }
 
+/*
+Method Name: display_Graph
+Method Description: Displays the connections in the graph
+*/
 void Graph::display_Graph(){
     for (auto it = vertex_collection.begin(); it != vertex_collection.end(); it++)
     {
@@ -95,10 +118,16 @@ void Graph::display_Graph(){
     }
 }
 
+/*
+Method Name: Get_Vertex
+Method Description: Gets the memory location of a vertex in the graph by name
+*/
 vertex* Graph::Get_Vertex(string name){
+    //if vertex does not exist
     if (!(vertex_collection[name])){
         cout << "Error" << "\n";
         return nullptr;
+    //return the vertex address
     } else {
         return vertex_collection[name];
     }
